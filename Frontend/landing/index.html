@@ -34,7 +34,7 @@
           </a>
         </li>
         <li>
-          <a href="/Frontend/Dashboard/Home/Home.html" class="active">
+          <a href="/Frontend/Dashboard/dashboard.html" class="active">
             <i data-lucide="layout-dashboard"></i>
             <span>Dashboard</span>
           </a>
@@ -90,7 +90,6 @@
             <span class="service">Police</span>
             <span class="number">100</span>
           </a>
-
           <a
             href="tel:1091"
             class="emergency-item"
@@ -209,7 +208,7 @@
                 <p class="stat-number">2,045</p>
               </div>
             </div>
-            <div class="stat-card">
+            <div class="stat-card">                
               <div
                 class="stat-icon"
                 style="background: rgba(16, 185, 129, 0.1)"
@@ -618,6 +617,35 @@
 <script src="/Frontend/landing/Access.js"></script>
     <script src="/Frontend/landing/main.js"></script>
     <script src="/Frontend/landing/auth_passing.js"></script>
+<script>
+  // In your auth_passing.js or similar frontend file
+document.querySelector('.frg_pss a').addEventListener('click', async (e) => {
+  e.preventDefault();
+  
+  const email = prompt('Please enter your email address:');
+  if (!email) return;
+  
+  try {
+  const response = await fetch('http://localhost:5000/api/v1/auth/forgot-password', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({ email, userType: 'user' })  // Include userType!
+});
 
+    
+    const data = await response.json();
+    
+    if (response.ok) {
+      alert('Password reset link sent to your email!');
+    } else {
+      alert(data.message || 'Failed to send reset link');
+    }
+  } catch (err) {
+    alert('Network error. Please try again later.');
+  }
+});
+</script>
   </body>
 </html>

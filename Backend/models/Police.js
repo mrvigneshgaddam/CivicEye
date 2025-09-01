@@ -8,6 +8,8 @@ const policeSchema = new mongoose.Schema({
     station: String,
     email: String,
     password: String,
+    passwordResetToken: String,
+    passwordResetExpires: Date,
     isAdmin: { type: Boolean, default: false }
 });
 

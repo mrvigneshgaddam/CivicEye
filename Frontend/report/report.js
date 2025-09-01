@@ -600,6 +600,7 @@ function setupFormSubmission() {
     }
   });
 }
+
 function checkPreviousSubmission() {
   const crimeForm = document.getElementById("crimeForm");
   const confirmationModal = document.getElementById("confirmation-modal");

@@ -1,165 +1,267 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>State-wise Crime Dashboard | CivicEve</title>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #f4f6f9;
-      margin: 0;
-      padding: 0;
-    }
-    .container {
-      max-width: 1100px;
-      margin: auto;
-      padding: 2rem;
-      background: #fff;
-      margin-top: 2rem;
-      border-radius: 8px;
-      box-shadow: 0 2px 12px rgba(0,0,0,0.05);
-    }
-    h2 {
-      text-align: center;
-      color: #2c3e50;
-    }
-    select {
-      padding: 0.5rem 1rem;
-      font-size: 1rem;
-      margin-top: 1rem;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-    }
-    table {
-      width: 100%;
-      margin-top: 2rem;
-      border-collapse: collapse;
-    }
-    th, td {
-      padding: 1rem;
-      text-align: center;
-      border-bottom: 1px solid #ddd;
-    }
-    th {
-      background-color: #2c3e50;
-      color: white;
-    }
-    tr:nth-child(even) {
-      background-color: #f9f9f9;
-    }
-    canvas {
-      margin-top: 2rem;
-      background: #fff;
-      border-radius: 8px;
-    }
-  </style>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Crime Statistics Dashboard</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
+    
+      <script src="/Frontend/landing/profile-dropdown.js"></script>
+        <script src="/Frontend/landing/auth_passing.js"></script>
+    <!-- <link rel="stylesheet" href="Dashboard.css"> -->
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .card {
+            margin: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        canvas {
+            max-width: 100%;
+        }
+        .map-container {
+            text-align: center;
+            margin: 20px 0;
+        }
+        .map-container img {
+            max-width: 100%;
+            height: auto;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 5px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .state-section {
+            padding-top: 70px;
+            margin-top: -70px;
+        }
+        .state-selector {
+            margin: 20px 0;
+            text-align: center;
+        }
+        .intro-text {
+    text-align: center;
+    margin: 30px auto;
+    padding: 20px;
+    max-width: 600px;
+    background: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.intro-text h2 {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #343a40;
+    margin-bottom: 10px;
+}
+
+.intro-text p {
+    font-size: 1.1rem;
+    color: #555;
+    margin: 5px 0;
+}
+
+        area {
+            cursor: pointer;
+        }
+        .state-info-card {
+            margin-bottom: 20px;
+        }
+        .stat-card {
+            text-align: center;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 5px;
+            color: white;
+        }
+        .stat-card.theft {
+            background-color: #4bc0c0;
+        }
+        .stat-card.murder {
+            background-color: #ff6384;
+        }
+        .stat-card.assault {
+            background-color: #ffce56;
+        }
+        .stat-card.rape {
+            background-color: #36a2eb;
+        }
+        .highlight-box {
+            background-color: #f8f9fa;
+            border-left: 4px solid #36a2eb;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+        .state-details {
+            margin-top: 15px;
+        }
+        .state-details p {
+            margin-bottom: 5px;
+        }
+        .state-details strong {
+            display: inline-block;
+            width: 120px;
+        }
+    </style>
 </head>
 <body>
-  <div class="container">
-    <h2>State-wise Crime Dashboard (2022)</h2>
+        <!-- <nav class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <button class="close-btn" id="closeNav">
+                <i data-lucide="chevron-left"></i>
+            </button>
+            <div class="logo">
+                <i data-lucide="shield-alert"></i>
+                <span>CivicEye</span>
+            </div>
+        </div>
+        <ul class="nav-links">
+            <li>
+                <a href="/Frontend/landing/index.html" class="active">
+                    <i data-lucide="home"></i>
+                    <span>Home</span>
+                </a>
+            </li>
+            <li>
+                <a href="/Frontend/Dashboard/Home/Home.html" class="active">
+                    <i data-lucide="layout-dashboard"></i>
+                    <span>Dashboard</span>
+                </a>
+            </li>
+            <li>
+                <a href="/Frontend/report/report.html" class="active">
+                    <i data-lucide="file-text"></i>
+                    <span>Report Case</span>
+                </a>
+            </li>
+            <li>
+                <a href="/Frontend/Track_case/track.html" class="active">
+                    <i data-lucide="search"></i>
+                    <span>Track Case</span>
+                </a>
+            </li>
+            <li>
+                <a href="/Frontend/Emergency/emergency.html" class="active">
+                    <i data-lucide="phone"></i>
+                    <span>Emergency Contacts</span>
+                </a>
+            </li>
+            <li>
+                <a href="/Frontend/help_guide/help.html" class="active">
+                    <i data-lucide="help-circle"></i>
+                    <span>Help Guide</span>
+                </a>
+            </li>
+            <li>
+                <a href="/Frontend/safety-tips/safety.html" class="active">
+                    <i data-lucide="shield"></i>
+                    <span>Safety Tips</span>
+                </a>
+            </li>
+            
+            <li>
+                <a href="/Frontend/Contact Us/contact-us.html"><i data-lucide="phone"></i>Contact</a>
+            </li>
+        </ul>
+        <div class="emergency-section">
+            <div class="emergency-title">
+                <i data-lucide="phone-call"></i>
+                <span>Emergency Numbers</span>
+            </div>
+            <div class="emergency-numbers">
+                <a href="tel:100" class="emergency-item" style="color: #ffff; text-decoration: none">
+                    <span class="service">Police</span>
+                    <span class="number">100</span>
+                </a>
 
-    <label for="stateSelect">Select a State:</label>
-    <select id="stateSelect"></select>
+                <a href="tel:1091" class="emergency-item" style="color: #ffff; text-decoration: none">
+                    <span class="service">Women Helpline</span>
+                    <span class="number">1091</span>
+                </a>
+                <a href="tel:108" class="emergency-item" style="color: #ffff; text-decoration: none">
+                    <span class="service">Ambulance</span>
+                    <span class="number">108</span>
+                </a>
+            </div>
+        </div>
+    </nav> -->
+    <div class="container">
+       <!-- Intro Section -->
+<div class="intro-text">
+    <h2>Crime in India</h2>
+    <p>Opening up India's crime data</p>
+    <p>Know your city. Track different kinds of crimes.</p>
+</div>
 
-    <canvas id="crimeChart" height="120"></canvas>
 
-    <table>
-      <thead>
-        <tr>
-          <th>Crime Type</th>
-          <th>Crime Rate</th>
-          <th>Year</th>
-        </tr>
-      </thead>
-      <tbody id="crimeTableBody">
-        <tr><td colspan="3">Loading...</td></tr>
-      </tbody>
-    </table>
-  </div>
+        <!-- State Dropdown Selector -->
+        <div class="state-selector">
+            <select id="stateDropdown" class="form-control" style="max-width: 300px; margin: 0 auto;">
+                <option value="">Select a State...</option>
+                <!-- Options will be populated by JavaScript -->
+            </select>
+        </div>
 
-  <script>
-    const jsonURL = "http://localhost:5000/uploads/filtered_crime_reports.json"; // Adjust path if needed
-    const stateSelect = document.getElementById('stateSelect');
-    const crimeTableBody = document.getElementById('crimeTableBody');
-    const ctx = document.getElementById('crimeChart').getContext('2d');
+        <!-- India Map Section -->
+        <div class="map-container">
+            <h3>India Crime Statistics Overview</h3>
+            <img src="india_map.gif" alt="India Map with Crime Statistics" usemap="#image-map" />
+            <p class="mt-2">Click on any state to view its crime statistics</p>
 
-    let jsonData = [];
-    let crimeChart = null;
+            <map name="image-map">
+                <area alt="Rajasthan" title="Rajasthan" data-state="Rajasthan" 
+                    coords="96,389,92,377,87,366,78,360,74,348,69,338,64,330,123,293,68,328,72,315,169,252,200,285,223,372,241,316,170,423,217,353,230,396,160,414,158,418,230,309,239,320,240,325,169,405,186,410,172,434,158,421,137,393,121,386,113,386" 
+                    shape="poly" />
+                <area alt="Gujarat" title="Gujarat" data-state="Gujarat" 
+                    coords="52,406,132,389,170,435,154,489,149,502,144,501,60,464,38,419" 
+                    shape="poly" />
+                <area alt="Andhra Pradesh" title="Andhra Pradesh" data-state="Andhra Pradesh" 
+                    coords="273,628,414,536,379,523,233,609,230,640,247,648,271,672,304,658,305,637,304,620,319,590,331,577,325,567,337,552,338,555,312,586" 
+                    shape="poly" />
+                <!-- Add more states as needed -->
+            </map>
+        </div>
 
-    fetch(jsonURL)
-      .then(res => {
-        if (!res.ok) throw new Error("JSON fetch failed");
-        return res.json();
-      })
-      .then(data => {
-        jsonData = data;
+        <!-- National Overview Section -->
+        <div class="row mt-4">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">National Crime Trends (Bar Chart)</h5>
+                        <canvas id="overallBarChart"></canvas>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">National Crime Distribution (Pie Chart)</h5>
+                        <canvas id="overallPieChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row mt-4">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">National Crime Trends Over Time (Line Chart)</h5>
+                        <canvas id="overallLineChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-        const uniqueStates = [...new Set(data.map(item => item.state))].sort();
-        uniqueStates.forEach((state, index) => {
-          const opt = document.createElement('option');
-          opt.value = state;
-          opt.textContent = state.replace(/^\d+\s*/, ''); // Remove index prefix like "1 "
-          stateSelect.appendChild(opt);
-        });
+        <!-- State-wise Sections -->
+        <div id="stateCharts">
+            <!-- State-wise charts will be populated here -->
+        </div>
+    </div>
 
-        updateDashboard(uniqueStates[0]);
-      })
-      .catch(err => {
-        crimeTableBody.innerHTML = `<tr><td colspan="3">Error loading data: ${err.message}</td></tr>`;
-      });
-
-    stateSelect.addEventListener('change', () => {
-      updateDashboard(stateSelect.value);
-    });
-
-    function updateDashboard(selectedState) {
-      const filtered = jsonData.filter(item => item.state === selectedState);
-
-      if (!filtered.length) {
-        crimeTableBody.innerHTML = `<tr><td colspan="3">No data available for this state.</td></tr>`;
-        return;
-      }
-
-      // Update Table
-      crimeTableBody.innerHTML = '';
-      filtered.forEach(row => {
-        crimeTableBody.innerHTML += `
-          <tr>
-            <td>${row.crime}</td>
-            <td>${row.rate}</td>
-            <td>${row.year}</td>
-          </tr>`;
-      });
-
-      // Update Chart
-      const labels = filtered.map(row => row.crime);
-      const data = filtered.map(row => row.rate);
-
-      if (crimeChart) crimeChart.destroy();
-
-      crimeChart = new Chart(ctx, {
-        type: 'bar',
-        data: {
-          labels: labels,
-          datasets: [{
-            label: `Crime Rate in ${selectedState}`,
-            data: data,
-            backgroundColor: '#4a6bff'
-          }]
-        },
-        options: {
-          responsive: true,
-          plugins: {
-            legend: { display: false }
-          },
-          scales: {
-            y: { beginAtZero: true }
-          }
-        }
-      });
-    }
-  </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.16.9/xlsx.full.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="Dashboard.js"></script>
 </body>
 </html>

@@ -1,4 +1,5 @@
   // Geolocation functionality
+  document.addEventListener('DOMContentLoaded', async function() {
   if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(
       function (position) {
@@ -24,6 +25,7 @@
   } else {
     console.error("Geolocation is not supported by this browser.");
   }
+});
 
   // Profile elements
   const profileSection = document.getElementById("profileSection");

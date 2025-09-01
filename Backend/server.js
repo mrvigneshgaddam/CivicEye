@@ -26,18 +26,33 @@ app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/police', policeRoutes);
 app.use('/api/reports', reportRoutes);
+app.use('/api/v1/auth', authRoutes);
 
+app.use(cors({
+  origin: 'http://localhost:3000', // Your frontend origin
+  methods: ['GET', 'POST', 'PATCH', 'DELETE'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
+app.get('/reset-password/:token', (req, res) => {
+  res.sendFile(path.join(__dirname, '../Frontend/landing/reset-password.html'));
+});
+app.get('/check-path', (req, res) => {
+  const fullPath = path.join(__dirname, '../Frontend/landing/reset-password.html');
+  res.send({
+    exists: require('fs').existsSync(fullPath),
+    path: fullPath
+  });
+});
 //  Global Error Handler
 app.use((err, req, res, next) => {
     console.error(err.stack);
     res.status(500).send('Something broke!');
 });
-// After other middleware
-app.use((req, res, next) => {
-    res.header('Access-Control-Allow-Origin', 'http://localhost:3000'); // Your frontend URL
-    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
-    next();
-});
+
+
+app.use(express.static(path.join(__dirname, '../Frontend')));
+
+
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
     console.log(`🚀 Server running on port ${PORT}`);
